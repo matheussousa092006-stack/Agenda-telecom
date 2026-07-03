@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             
             $table->unsignedBigInteger('task_id'); 
-            $table->unsignedBigInteger('parent_task_id')->nullable();
+            $table->unsignedBigInteger('parent_task_id');
         
-            $table->string('tecnico_nome')->nullable();
-            $table->string('ordem_servico')->nullable();
-            $table->string('titulo')->nullable();
+            $table->string('tecnico_nome');
+            $table->string('ordem_servico');
+            $table->string('titulo');
             $table->string('task_code')->nullable();
             $table->string('categoria')->nullable();
-            $table->string('regiao')->nullable();
+            $table->string('regiao');
             $table->string('status')->nullable();
             $table->string('protocolo')->nullable();
             $table->string('prioridade')->nullable();
