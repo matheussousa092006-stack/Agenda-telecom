@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('os_tecnico', function (Blueprint $table) {
+        Schema::create('os_tecnicos', function (Blueprint $table) {
             $table->id();
             
             $table->unsignedBigInteger('task_id'); 
