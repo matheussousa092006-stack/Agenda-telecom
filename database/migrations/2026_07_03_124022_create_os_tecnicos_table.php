@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_task_id')->nullable();
         
             $table->string('tecnico_nome')->nullable();
-            $table->string('ordem_servico')->nullablea();
+            $table->string('ordem_servico')->nullable();
             $table->string('titulo')->nullable();
             $table->string('task_code')->nullable();
             $table->string('categoria')->nullable();
