@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('os_tecnico_id');
+            $table->unsignedBigInteger('tecnico_id');
 
             $table->date('data');
 

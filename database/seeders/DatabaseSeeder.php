@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
     $this->call([
         TecnicoSeeder::class,
         OsTecnicoSeeder::class,
+         AgendaOsSeeder::class,
     ]);
 }
 }

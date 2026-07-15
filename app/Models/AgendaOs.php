@@ -12,20 +12,20 @@ class AgendaOs extends Model
     protected $fillable = [
         'os_tecnico_id',
         'tecnico_id',
-        'data_agendamento',
+        'data',
         'hora_inicio',
         'hora_fim',
-        'status',
+        'ordem',
         'observacao',
     ];
 
     public function osTecnico(): BelongsTo
     {
-        return $this->belongsTo(OsTecnico::class);
+        return $this->belongsTo(OsTecnico::class, 'os_tecnico_id');
     }
 
     public function tecnico(): BelongsTo
     {
-        return $this->belongsTo(Tecnico::class);
+        return $this->belongsTo(Tecnico::class, 'tecnico_id');
     }
 }
