@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AgendaController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AgendaController::class, 'index']);
