@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             
             $table->unsignedBigInteger('task_id'); 
-            $table->unsignedBigInteger('parent_task_id');
+            $table->unsignedBigInteger('parent_task_id')->nullable();
         
             $table->string('tecnico_nome');
             $table->string('ordem_servico');
@@ -39,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('os_tecnico');
+        Schema::dropIfExists('os_tecnicos');
     }
 };
