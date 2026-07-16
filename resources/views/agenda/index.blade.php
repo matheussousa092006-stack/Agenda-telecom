@@ -94,6 +94,18 @@
     min-width:180px;
     text-align:center;
 
+    .dia-semana{
+
+    margin-top:8px;
+
+    font-size:15px;
+
+    color:#6b7280;
+
+    font-weight:normal;
+
+}
+
 }
 
         .agenda{
@@ -186,19 +198,6 @@
     <div class="dia-semana">
 
         {{ \Carbon\Carbon::parse($dataSelecionada)->translatedFormat('l') }}
-
-       .dia-semana{
-
-       margin-top:8px;
-
-       font-size:15px;
-
-       color:#6b7280;
-
-       font-weight:normal;
-
-     }
-
 
     </div>
 
