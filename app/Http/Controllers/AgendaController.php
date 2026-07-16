@@ -12,6 +12,8 @@ class AgendaController extends Controller
 {
    public function index(Request $request)
 {
+    Carbon::setLocale('pt_BR');
+
     $dataSelecionada = $request->get('data', now()->toDateString());
 
     $tecnicos = Tecnico::orderBy('nome')->get();
