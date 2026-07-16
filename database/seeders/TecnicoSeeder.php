@@ -2,21 +2,15 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TecnicoSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
-{
-    \App\Models\Tecnico::insert([
-        ['nome' => 'Carlos'],
-        ['nome' => 'João'],
-        ['nome' => 'Pedro'],
-        ['nome' => 'Marcos'],
-    ]);
-}
+    {
+        \App\Models\Tecnico::firstOrCreate(['nome' => 'Carlos']);
+        \App\Models\Tecnico::firstOrCreate(['nome' => 'João']);
+        \App\Models\Tecnico::firstOrCreate(['nome' => 'Pedro']);
+        \App\Models\Tecnico::firstOrCreate(['nome' => 'Marcos']);
+    }
 }
