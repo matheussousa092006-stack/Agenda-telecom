@@ -10,15 +10,11 @@ class AgendaController extends Controller
 {
     public function index()
 {
-    $tecnicos = \App\Models\Tecnico::orderBy('nome')->get();
-
-    $agenda = \App\Models\AgendaOs::with('osTecnico')
-        ->orderBy('data')
-        ->orderBy('hora_inicio')
-        ->get()
-        ->groupBy('tecnico_id');
-
-    return view('agenda.index', compact('tecnicos', 'agenda'));
+    dd([
+        'tecnicos' => \App\Models\Tecnico::count(),
+        'agenda' => \App\Models\AgendaOs::count(),
+        'os' => \App\Models\OsTecnico::count(),
+    ]);
 }
 
 public function mover(Request $request, AgendaOs $agendaOs)
