@@ -6,12 +6,15 @@ use App\Models\OsTecnico;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\AgendaOs;
+use App\Models\Tecnico;
 
 class AgendaController extends Controller
 {
-    public function index(Request $request)
+   public function index(Request $request)
 {
     $dataSelecionada = $request->get('data', now()->toDateString());
+
+    $tecnicos = Tecnico::orderBy('nome')->get();
 
     $agenda = AgendaOs::with('osTecnico')
         ->whereDate('data', $dataSelecionada)
@@ -21,6 +24,7 @@ class AgendaController extends Controller
 
     return view('agenda.index', compact(
         'agenda',
+        'tecnicos',
         'dataSelecionada'
     ));
 }
