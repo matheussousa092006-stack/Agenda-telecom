@@ -14,11 +14,13 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      */
     public function run(): void
-{
+    {
+    dd('Seeder executou');
+
     $this->call([
         TecnicoSeeder::class,
         OsTecnicoSeeder::class,
-         AgendaOsSeeder::class,
+        AgendaOsSeeder::class,
     ]);
 }
 }
