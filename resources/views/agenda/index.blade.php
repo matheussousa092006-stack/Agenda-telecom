@@ -85,6 +85,26 @@
 
 <h1>Agenda Telecom</h1>
 
+<div class="flex items-center justify-center gap-4 mb-6">
+    <a
+        href="/?data={{ \Carbon\Carbon::parse($dataSelecionada)->subDay()->toDateString() }}"
+        class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300"
+    >
+        ◀
+    </a>
+
+    <div class="text-xl font-semibold">
+        {{ \Carbon\Carbon::parse($dataSelecionada)->format('d/m/Y') }}
+    </div>
+
+    <a
+        href="/?data={{ \Carbon\Carbon::parse($dataSelecionada)->addDay()->toDateString() }}"
+        class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300"
+    >
+        ▶
+    </a>
+</div>
+
 <div class="agenda">
 
 @foreach($tecnicos as $tecnico)

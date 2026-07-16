@@ -4,21 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\OsTecnico;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\AgendaOs;
 
 class AgendaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
 {
-    $tecnicos = \App\Models\Tecnico::orderBy('nome')->get();
+    $dataSelecionada = $request->get('data', now()->toDateString());
 
-    $agenda = \App\Models\AgendaOs::with('osTecnico')
-        ->orderBy('data')
+    $agenda = AgendaOs::with('osTecnico')
+        ->whereDate('data', $dataSelecionada)
         ->orderBy('hora_inicio')
         ->get()
         ->groupBy('tecnico_id');
 
-    return view('agenda.index', compact('tecnicos', 'agenda'));
+    return view('agenda.index', compact(
+        'agenda',
+        'dataSelecionada'
+    ));
 }
 
 public function mover(Request $request, AgendaOs $agendaOs)
