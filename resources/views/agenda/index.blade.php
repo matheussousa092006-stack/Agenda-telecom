@@ -14,99 +14,96 @@
             background:#f4f6f9;
         }
 
+        .painel-agenda{
+            margin:24px 20px 0;
+            background:#fff;
+            border:1px solid #e5e7eb;
+            border-radius:12px;
+            box-shadow:0 2px 8px rgba(15, 23, 42, .06);
+            overflow:hidden;
+        }
+
         .cabecalho{
-
-    text-align:center;
-
-    padding:25px 0 10px;
-
-}
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:24px;
+            padding:24px 28px;
+        }
 
         .cabecalho h1{
-
-    margin:0;
-
-    font-size:44px;
-
-    color:#1f2937;
-
-}
+            margin:0;
+            font-size:28px;
+            color:#111827;
+        }
 
         .cabecalho p{
-
-    margin-top:8px;
-
-    color:#6b7280;
-
-    font-size:16px;
-
-}
-
-        h1{
-            margin:20px;
+            margin:6px 0 0;
+            color:#6b7280;
+            font-size:15px;
         }
 
         .header-agenda{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:18px 28px;
+            border-top:1px solid #e5e7eb;
+            background:#f9fafb;
+        }
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:20px;
-    margin-bottom:20px;
+        .btn-data{
+            width:38px;
+            height:38px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:#fff;
+            color:#374151;
+            border:1px solid #d1d5db;
+            text-decoration:none;
+            border-radius:8px;
+            font-size:20px;
+            font-weight:bold;
+            transition:.2s;
+        }
 
-}
+        .btn-data:hover{
+            color:#2563eb;
+            border-color:#2563eb;
+            background:#eff6ff;
+        }
 
-.btn-data{
+        .btn-hoje{
+            padding:10px 16px;
+            color:#fff;
+            background:#2563eb;
+            border-radius:8px;
+            font-size:14px;
+            font-weight:600;
+            text-decoration:none;
+            transition:.2s;
+        }
 
-    width:45px;
-    height:45px;
+        .btn-hoje:hover{
+            background:#1d4ed8;
+        }
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+        .data-atual{
+            min-width:160px;
+            color:#111827;
+            font-size:20px;
+            font-weight:700;
+            text-align:center;
+        }
 
-    background:#2563eb;
-    color:white;
-
-    text-decoration:none;
-
-    border-radius:50%;
-
-    font-size:22px;
-    font-weight:bold;
-
-    transition:.2s;
-
-}
-
-.btn-data:hover{
-
-    background:#1d4ed8;
-
-}
-
-.data-atual{
-
-    font-size:28px;
-    font-weight:bold;
-    color:#222;
-
-    min-width:180px;
-    text-align:center;
-
-    .dia-semana{
-
-    margin-top:8px;
-
-    font-size:15px;
-
-    color:#6b7280;
-
-    font-weight:normal;
-
-}
-
-}
+        .dia-semana{
+            margin-top:4px;
+            color:#6b7280;
+            font-size:14px;
+            font-weight:normal;
+            text-transform:capitalize;
+        }
 
         .agenda{
             display:flex;
@@ -167,30 +164,51 @@
 
         }
 
-        .filtro-regiao{
+        .filtro-regiao label{
+            display:block;
+            margin-bottom:6px;
+            color:#4b5563;
+            font-size:13px;
+            font-weight:600;
+        }
 
-    display:flex;
-    justify-content:center;
+        .filtro-regiao select{
+            min-width:220px;
+            padding:10px 36px 10px 12px;
+            color:#1f2937;
+            background:#fff;
+            border:1px solid #d1d5db;
+            border-radius:8px;
+            font-size:14px;
+            cursor:pointer;
+        }
 
-    margin:25px 0;
+        .filtro-regiao select:focus{
+            border-color:#2563eb;
+            outline:3px solid #dbeafe;
+        }
 
-}
+        @media (max-width: 640px){
+            .painel-agenda{
+                margin:12px 12px 0;
+            }
 
-.filtro-regiao select{
+            .cabecalho{
+                align-items:stretch;
+                flex-direction:column;
+                padding:20px;
+            }
 
-    padding:10px 18px;
+            .filtro-regiao select{
+                width:100%;
+            }
 
-    font-size:16px;
-
-    border-radius:8px;
-
-    border:1px solid #d1d5db;
-
-    background:white;
-
-    cursor:pointer;
-
-}
+            .header-agenda{
+                justify-content:center;
+                flex-wrap:wrap;
+                padding:16px 20px;
+            }
+        }
 
     </style>
 
@@ -198,19 +216,22 @@
 
 <body>
 
+<div class="painel-agenda">
 <div class="cabecalho">
 
-    <h1>Agenda Telecom</h1>
+    <div>
+        <h1>Agenda Telecom</h1>
 
-    <p>Programação diária dos técnicos</p>
+        <p>Programação diária dos técnicos</p>
+    </div>
 
-</div>
-
-<div class="filtro-regiao">
+    <div class="filtro-regiao">
 
     <form method="GET">
 
-        <select name="regiao" onchange="this.form.submit()">
+        <label for="regiao">Região</label>
+
+        <select id="regiao" name="regiao" onchange="this.form.submit()">
 
             <option value="VA" {{ $regiao == 'VA' ? 'selected' : '' }}>
                 Vale do Aço
@@ -230,14 +251,15 @@
 
     </form>
 
-</div>
+    </div>
 
+</div>
 
 <div class="header-agenda">
 
     <a
         class="btn-data"
-        href="/?data={{ \Carbon\Carbon::parse($dataSelecionada)->copy()->subDay()->toDateString() }}"
+        href="{{ url('/?' . http_build_query(['regiao' => $regiao, 'data' => \Carbon\Carbon::parse($dataSelecionada)->copy()->subDay()->toDateString()])) }}"
     >
         ◀
     </a>
@@ -255,11 +277,19 @@
 </div>
     <a
         class="btn-data"
-        href="/?data={{ \Carbon\Carbon::parse($dataSelecionada)->copy()->addDay()->toDateString() }}"
+        href="{{ url('/?' . http_build_query(['regiao' => $regiao, 'data' => \Carbon\Carbon::parse($dataSelecionada)->copy()->addDay()->toDateString()])) }}"
     >
         ▶
     </a>
 
+    <a
+        class="btn-hoje"
+        href="{{ url('/?' . http_build_query(['regiao' => $regiao, 'data' => now()->toDateString()])) }}"
+    >
+        Hoje
+    </a>
+
+</div>
 </div>
 
 
