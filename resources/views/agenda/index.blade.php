@@ -167,6 +167,31 @@
 
         }
 
+        .filtro-regiao{
+
+    display:flex;
+    justify-content:center;
+
+    margin:25px 0;
+
+}
+
+.filtro-regiao select{
+
+    padding:10px 18px;
+
+    font-size:16px;
+
+    border-radius:8px;
+
+    border:1px solid #d1d5db;
+
+    background:white;
+
+    cursor:pointer;
+
+}
+
     </style>
 
 </head>
@@ -178,6 +203,32 @@
     <h1>Agenda Telecom</h1>
 
     <p>Programação diária dos técnicos</p>
+
+</div>
+
+<div class="filtro-regiao">
+
+    <form method="GET">
+
+        <select name="regiao" onchange="this.form.submit()">
+
+            <option value="VA" {{ $regiao == 'VA' ? 'selected' : '' }}>
+                Vale do Aço
+            </option>
+
+            <option value="GV" {{ $regiao == 'GV' ? 'selected' : '' }}>
+                Governador Valadares
+            </option>
+
+        </select>
+
+        <input
+            type="hidden"
+            name="data"
+            value="{{ $dataSelecionada }}"
+        >
+
+    </form>
 
 </div>
 

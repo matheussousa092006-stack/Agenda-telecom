@@ -16,7 +16,11 @@ class AgendaController extends Controller
 
     $dataSelecionada = $request->get('data', now()->toDateString());
 
-    $tecnicos = Tecnico::orderBy('nome')->get();
+    $regiao = $request->get('regiao', 'VA');
+
+    $tecnicos = Tecnico::where('regiao', $regiao)
+    ->orderBy('nome')
+    ->get();
 
     $agenda = AgendaOs::with('osTecnico')
         ->whereDate('data', $dataSelecionada)
@@ -24,11 +28,13 @@ class AgendaController extends Controller
         ->get()
         ->groupBy('tecnico_id');
 
+    
     return view('agenda.index', compact(
-        'agenda',
-        'tecnicos',
-        'dataSelecionada'
-    ));
+    'agenda',
+    'tecnicos',
+    'dataSelecionada',
+    'regiao'
+));
 }
 
 public function mover(Request $request, AgendaOs $agendaOs)
