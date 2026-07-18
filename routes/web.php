@@ -3,7 +3,8 @@
 use App\Http\Controllers\AgendaController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [AgendaController::class, 'index']);
+Route::get('/', [AgendaController::class, 'index'])
+    ->name('agenda.index');
 
 Route::post('/agenda/{agendaOs}/mover', [AgendaController::class, 'mover'])
     ->name('agenda.mover');

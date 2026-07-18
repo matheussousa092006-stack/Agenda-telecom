@@ -108,21 +108,36 @@
         .agenda{
             display:flex;
             gap:20px;
-            padding:20px;
+            min-width:max-content;
             align-items:flex-start;
+        }
+
+        .agenda-scroll{
+            max-height:calc(100vh - 250px);
+            margin:20px;
+            overflow:auto;
+            border:1px solid #e5e7eb;
+            border-radius:8px;
+            background:#fff;
         }
 
         .tecnico{
 
             width:300px;
+            flex:0 0 300px;
             background:white;
-            border-radius:8px;
-            box-shadow:0 2px 6px rgba(0,0,0,.1);
-            overflow:hidden;
+            overflow:visible;
 
         }
 
         .titulo{
+
+            position:sticky;
+            top:0;
+            z-index:5;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
 
             background:#2563eb;
             color:white;
@@ -133,8 +148,19 @@
 
         .horarios{
             position:relative;
-            height:720px;
+            height:1692px;
             background:#fff;
+        }
+
+        .titulo small{
+            color:#dbeafe;
+            font-size:12px;
+            font-weight:500;
+        }
+
+        .agenda.semanal .tecnico{
+            width:240px;
+            flex-basis:240px;
         }
 
         .slot{
@@ -211,7 +237,14 @@
             user-select:none;
         }
 
-        .filtro-regiao label{
+        .filtros-agenda{
+            display:flex;
+            align-items:flex-end;
+            gap:12px;
+            flex-wrap:wrap;
+        }
+
+        .campo-filtro label{
             display:block;
             margin-bottom:6px;
             color:#4b5563;
@@ -219,8 +252,8 @@
             font-weight:600;
         }
 
-        .filtro-regiao select{
-            min-width:220px;
+        .campo-filtro select{
+            min-width:170px;
             padding:10px 36px 10px 12px;
             color:#1f2937;
             background:#fff;
@@ -230,7 +263,7 @@
             cursor:pointer;
         }
 
-        .filtro-regiao select:focus{
+        .campo-filtro select:focus{
             border-color:#2563eb;
             outline:3px solid #dbeafe;
         }
@@ -246,7 +279,12 @@
                 padding:20px;
             }
 
-            .filtro-regiao select{
+            .filtros-agenda{
+                align-items:stretch;
+                flex-direction:column;
+            }
+
+            .campo-filtro select{
                 width:100%;
             }
 
@@ -263,42 +301,68 @@
 
 <body>
 
+@php
+    $parametrosNavegacao = [
+        'visao' => $visao,
+        'regiao' => $regiao,
+    ];
+
+    if ($tecnicoSelecionado) {
+        $parametrosNavegacao['tecnico'] = $tecnicoSelecionado->id;
+    }
+
+    $dataAnterior = $visao === 'semanal'
+        ? $semanaInicio->copy()->subWeek()->toDateString()
+        : \Carbon\Carbon::parse($dataSelecionada)->subDay()->toDateString();
+    $dataPosterior = $visao === 'semanal'
+        ? $semanaInicio->copy()->addWeek()->toDateString()
+        : \Carbon\Carbon::parse($dataSelecionada)->addDay()->toDateString();
+@endphp
+
 <div class="painel-agenda">
 <div class="cabecalho">
 
     <div>
         <h1>Agenda Telecom</h1>
 
-        <p>Programação diária dos técnicos</p>
+        <p>{{ $visao === 'semanal' ? 'Programação semanal do técnico' : 'Programação diária dos técnicos' }}</p>
     </div>
 
-    <div class="filtro-regiao">
+    <form method="GET" class="filtros-agenda">
+        <input type="hidden" name="data" value="{{ $dataSelecionada }}">
 
-    <form method="GET">
+        <div class="campo-filtro">
+            <label for="visao">Visualização</label>
 
-        <label for="regiao">Região</label>
+            <select id="visao" name="visao" onchange="this.form.submit()">
+                <option value="diaria" {{ $visao === 'diaria' ? 'selected' : '' }}>Diária</option>
+                <option value="semanal" {{ $visao === 'semanal' ? 'selected' : '' }}>Semanal</option>
+            </select>
+        </div>
 
-        <select id="regiao" name="regiao" onchange="this.form.submit()">
+        <div class="campo-filtro">
+            <label for="regiao">Região</label>
 
-            <option value="VA" {{ $regiao == 'VA' ? 'selected' : '' }}>
-                Vale do Aço
-            </option>
+            <select id="regiao" name="regiao" onchange="this.form.submit()">
+                <option value="VA" {{ $regiao === 'VA' ? 'selected' : '' }}>Vale do Aço</option>
+                <option value="GV" {{ $regiao === 'GV' ? 'selected' : '' }}>Governador Valadares</option>
+            </select>
+        </div>
 
-            <option value="GV" {{ $regiao == 'GV' ? 'selected' : '' }}>
-                Governador Valadares
-            </option>
+        @if($visao === 'semanal')
+            <div class="campo-filtro">
+                <label for="tecnico">Técnico</label>
 
-        </select>
-
-        <input
-            type="hidden"
-            name="data"
-            value="{{ $dataSelecionada }}"
-        >
-
+                <select id="tecnico" name="tecnico" onchange="this.form.submit()">
+                    @foreach($tecnicos as $tecnico)
+                        <option value="{{ $tecnico->id }}" {{ $tecnicoSelecionado?->id === $tecnico->id ? 'selected' : '' }}>
+                            {{ $tecnico->nome }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
     </form>
-
-    </div>
 
 </div>
 
@@ -306,117 +370,48 @@
 
     <a
         class="btn-data"
-        href="{{ url('/?' . http_build_query(['regiao' => $regiao, 'data' => \Carbon\Carbon::parse($dataSelecionada)->copy()->subDay()->toDateString()])) }}"
+        href="{{ route('agenda.index', [...$parametrosNavegacao, 'data' => $dataAnterior]) }}"
     >
         ◀
     </a>
 
     <div class="data-atual">
 
-    {{ \Carbon\Carbon::parse($dataSelecionada)->format('d/m/Y') }}
+    @if($visao === 'semanal')
+        {{ $semanaInicio->format('d/m') }} a {{ $semanaFim->format('d/m/Y') }}
+    @else
+        {{ \Carbon\Carbon::parse($dataSelecionada)->format('d/m/Y') }}
+    @endif
 
     <div class="dia-semana">
 
-        {{ \Carbon\Carbon::parse($dataSelecionada)->translatedFormat('l') }}
+        {{ $visao === 'semanal' ? 'segunda-feira a domingo' : \Carbon\Carbon::parse($dataSelecionada)->translatedFormat('l') }}
 
     </div>
 
 </div>
     <a
         class="btn-data"
-        href="{{ url('/?' . http_build_query(['regiao' => $regiao, 'data' => \Carbon\Carbon::parse($dataSelecionada)->copy()->addDay()->toDateString()])) }}"
+        href="{{ route('agenda.index', [...$parametrosNavegacao, 'data' => $dataPosterior]) }}"
     >
         ▶
     </a>
 
     <a
         class="btn-hoje"
-        href="{{ url('/?' . http_build_query(['regiao' => $regiao, 'data' => now()->toDateString()])) }}"
+        href="{{ route('agenda.index', [...$parametrosNavegacao, 'data' => now()->toDateString()]) }}"
     >
-        Hoje
+        {{ $visao === 'semanal' ? 'Esta semana' : 'Hoje' }}
     </a>
 
 </div>
 </div>
 
 
-<div class="agenda">
-
-@foreach($tecnicos as $tecnico)
-
-<div class="tecnico">
-
-<div class="titulo">
-
-{{ $tecnico->nome }}
-
+<div class="agenda-scroll">
+<div class="agenda {{ $visao }}">
+    @include('agenda.partials.grade')
 </div>
-
-<div class="horarios">
-
-@for($minuto = 8 * 60; $minuto < 18 * 60; $minuto += 30)
-
-@php
-    $horaSlot = sprintf('%02d:%02d', intdiv($minuto, 60), $minuto % 60);
-@endphp
-
-<div class="slot"
-
-    data-tecnico="{{ $tecnico->id }}"
-    data-hora="{{ $horaSlot }}">
-
-<div class="hora">
-
-{{ $minuto % 60 === 0 ? $horaSlot : '' }}
-
-</div>
-
-</div>
-
-@endfor
-
-@foreach($agenda[$tecnico->id] ?? collect() as $item)
-
-@php
-    $inicio = \Carbon\Carbon::parse($item->hora_inicio);
-    $fim = $item->hora_fim
-        ? \Carbon\Carbon::parse($item->hora_fim)
-        : $inicio->copy()->addHour();
-    $minutosInicio = ($inicio->hour * 60 + $inicio->minute) - (8 * 60);
-    $duracao = ($fim->hour * 60 + $fim->minute) - ($inicio->hour * 60 + $inicio->minute);
-@endphp
-
-<div class="card"
-    data-id="{{ $item->id }}"
-    data-tecnico="{{ $tecnico->id }}"
-    data-inicio="{{ $inicio->format('H:i') }}"
-    data-fim="{{ $fim->format('H:i') }}"
-    data-duracao="{{ $duracao }}"
-    draggable="true"
-    style="top:{{ $minutosInicio * 1.2 }}px; height:{{ max($duracao * 1.2 - 4, 32) }}px;">
-
-    <div class="card-horario">
-        {{ $inicio->format('H:i') }}–<span class="card-hora-fim">{{ $fim->format('H:i') }}</span>
-    </div>
-
-    <strong>{{ $item->osTecnico->ordem_servico }}</strong>
-
-    <div>{{ $item->osTecnico->titulo }}</div>
-
-    <small>{{ $item->osTecnico->regiao }} · {{ $item->osTecnico->status }}</small>
-
-    <div class="resize-handle" title="Arraste para alterar a duração"></div>
-
-</div>
-
-@endforeach
-
-</div>
-
-</div>
-
-@endforeach
-
 </div>
 <script>
 
@@ -480,7 +475,7 @@ cards.forEach(card => {
         const fimOriginal = card.dataset.fim;
         const [horaInicio, minutoInicio] = card.dataset.inicio.split(':').map(Number);
         const inicioEmMinutos = horaInicio * 60 + minutoInicio;
-        const duracaoMaxima = 18 * 60 - inicioEmMinutos;
+        const duracaoMaxima = 23 * 60 + 30 - inicioEmMinutos;
 
         let novaDuracao = duracaoOriginal;
 
@@ -603,6 +598,8 @@ document.querySelectorAll('.slot').forEach(slot => {
 
         const tecnico = slot.dataset.tecnico;
 
+        const data = slot.dataset.data;
+
         const hora = slot.dataset.hora;
 
         const response = await fetch(`/agenda/${id}/mover`,{
@@ -623,6 +620,8 @@ document.querySelectorAll('.slot').forEach(slot => {
 
                 tecnico_id:tecnico,
 
+                data:data,
+
                 hora_inicio:hora
 
             })
@@ -642,6 +641,19 @@ document.querySelectorAll('.slot').forEach(slot => {
     });
 
 });
+
+const agendaScroll = document.querySelector('.agenda-scroll');
+
+if (agendaScroll) {
+
+    const posicoes = [...cards].map(card => Number.parseFloat(card.style.top));
+    const primeiraPosicao = posicoes.length
+        ? Math.min(...posicoes)
+        : (new Date().getHours() * 60 + new Date().getMinutes()) * PIXELS_POR_MINUTO;
+
+    agendaScroll.scrollTop = Math.max(0, primeiraPosicao - ALTURA_SLOT * 2);
+
+}
 
 </script>
 </body>
